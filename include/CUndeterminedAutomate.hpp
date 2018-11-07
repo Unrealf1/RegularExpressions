@@ -1,10 +1,11 @@
 #pragma once
 
-#include "IRegularAutomate.hpp"
 #include <iostream>
 #include <set>
 #include <stack>
 #include <vector>
+
+#include "IRegularAutomate.hpp"
 #include "General.hpp"
 
 struct Node;
@@ -36,6 +37,8 @@ class CUndeterminedAutomate : public IRegularAutomate
 		void print() const;
 	private:
 		Node* root;
+
+		void addEpsilon(std::set<Node*>& active) const;
 		bool build(Node*, std::set<Node*>&);
 		std::stack<std::string> buildStackFromExpression(const std::string&) const;
 };

@@ -5,6 +5,13 @@ bool operator<(const Edge& left, const Edge& right)
 	return left.expression < right.expression;
 }
 
+CUndeterminedAutomate::~CUndeterminedAutomate()
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+}
 
 CUndeterminedAutomate::CUndeterminedAutomate(
 	const std::string& regularExpression)
@@ -13,11 +20,6 @@ CUndeterminedAutomate::CUndeterminedAutomate(
 	if (!is_regular(regularExpression))
 	{
 		std::cout << "ERROR";
-		return;
-	}
-	if (regularExpression.size() == 1 && regularExpression[0] == '1')
-	{
-		root->terminal = true;
 		return;
 	}
 	Node* new_node = new Node;
@@ -141,19 +143,71 @@ std::stack<std::string> CUndeterminedAutomate::buildStackFromExpression(
 	return buildStack;
 }
 
-CUndeterminedAutomate::~CUndeterminedAutomate()
-{;
-
+inline void CUndeterminedAutomate::addEpsilon(std::set<Node*>& active) const
+{
+	bool added = true;
+	while (added)
+	{
+		added = false;
+		for (Node* cur : active)
+		{
+			for (Edge child : cur->children)
+			{
+				if (child.expression == "1" && active.find(child.nd) == active.end())
+				{
+					active.insert(child.nd);
+					added = true;
+				}
+			}
+		}
+	}
 }
 
 bool CUndeterminedAutomate::check(const std::string& word) const
 {
-	Node* cur = root;
+	std::set<Node*> active = {root};
+	addEpsilon(active);
+	bool added = true;
+	while (added)
+	{
+		added = false;
+		for (Node* cur : active)
+		{
+			for (Edge child : cur->children)
+			{
+				if (child.expression == "1" && active.find(child.nd) == active.end())
+				{
+					active.insert(child.nd);
+					added = true;
+				}
+			}
+			addEpsilon(active);
+		}
+	}
+
 	for (char c : word)
 	{
-		continue;
+		std::set<Node*> new_active;
+		for (Node* cur : active)
+		{
+			for (Edge child : cur->children)
+			{
+				if (child.expression == "1" || child.expression == std::string({ c }))
+				{
+					new_active.insert(child.nd);
+				}
+			}
+		}
+		active = new_active;
 	}
-	return true;
+	for (Node* nd : active)
+	{
+		if (nd->terminal)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 
