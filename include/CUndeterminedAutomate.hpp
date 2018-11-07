@@ -23,7 +23,7 @@ struct Node
 	Node();
 	int id;
 	static int g_id;
-	std::set<Edge> children;
+	std::vector<Edge> children;
 	bool terminal = false;
 };
 

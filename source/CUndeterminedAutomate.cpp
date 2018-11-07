@@ -22,7 +22,7 @@ CUndeterminedAutomate::CUndeterminedAutomate(
 	}
 	Node* new_node = new Node;
 	new_node->terminal = true;
-	root->children.insert({regularExpression, new_node});
+	root->children.push_back({regularExpression, new_node});
 	std::set<Node*> been;
 	while(build(root, been))
 	{
@@ -39,9 +39,10 @@ bool CUndeterminedAutomate::build(Node* currentNode, std::set<Node*>& been)
 {
 	bool changed = false;
 	been.insert(currentNode);
-	std::cout << "Has " << currentNode->children.size() << " children" << std::endl;
-	for (Edge child : currentNode->children)
+	std::cout << currentNode->id << " has " << currentNode->children.size() << " children" << std::endl;
+	for (int i = 0; i < currentNode->children.size(); ++i)
 	{
+		Edge child = currentNode->children[i];
 		/*if (child.nd == currentNode)
 		{
 			std::cout << "It's cycle!" << std::endl;
@@ -64,7 +65,7 @@ bool CUndeterminedAutomate::build(Node* currentNode, std::set<Node*>& been)
 			continue;
 		}
 		changed = true;
-		currentNode->children.erase(child);
+		currentNode->children.erase(currentNode->children.begin() + i);
 		char operation = buildStack.top()[0];
 		std::cout << "Operation is "<< operation << std::endl;
 		buildStack.pop();
@@ -72,8 +73,10 @@ bool CUndeterminedAutomate::build(Node* currentNode, std::set<Node*>& been)
 		{
 			///////////////////////?????????????????
 			std::string cicle = buildStack.top();
-			currentNode->children.insert({cicle, currentNode});
-			currentNode->children.insert({"1", child.nd});
+			currentNode->children.push_back({cicle, currentNode});
+			currentNode->children.push_back({"1", child.nd});
+			std::cout << "Added " << currentNode->id << " -> " << child.nd->id << " by " << cicle << std::endl;
+			std::cout << "Added " << currentNode->id << " -> " << child.nd->id << " by " << "1" << std::endl;
 			continue;
 		}
 		std::string right_part = buildStack.top();
@@ -83,14 +86,18 @@ bool CUndeterminedAutomate::build(Node* currentNode, std::set<Node*>& been)
 		if (operation == '.')
 		{
 			Node* new_node = new Node;
-			currentNode->children.insert({left_part, new_node});
-			new_node->children.insert(
-				{right_part, child.nd});
+			currentNode->children.push_back({left_part, new_node});
+			std::cout << "Added " << currentNode->id << " -> " << new_node->id << " by " << left_part << std::endl;
+			new_node->children.push_back({right_part, child.nd});
+			std::cout << "Added " << new_node->id << " -> " << child.nd->id << " by " << right_part << std::endl;
+
 		}
 		if (operation == '+')
 		{
-			currentNode->children.insert({left_part, child.nd});
-			currentNode->children.insert({right_part, child.nd});
+			currentNode->children.push_back({left_part, child.nd});
+			currentNode->children.push_back({right_part, child.nd});
+			std::cout << "Added " << currentNode->id << " -> " << child.nd->id << " by " << left_part << std::endl;
+			std::cout << "Added " << currentNode->id << " -> " << child.nd->id << " by " << right_part << std::endl;
 		}
 	}
 	for (Edge child : currentNode->children)
@@ -121,7 +128,7 @@ std::stack<std::string> CUndeterminedAutomate::buildStackFromExpression(
 			buildStack.pop();
 			std::string left_part = buildStack.top();
 			buildStack.pop();
-			buildStack.push(right_part+left_part+c);
+			buildStack.push(left_part+right_part+c);
 		}
 		if (c == '*')
 		{
@@ -146,6 +153,7 @@ bool CUndeterminedAutomate::check(const std::string& word) const
 	{
 		continue;
 	}
+	return true;
 }
 
 
@@ -160,8 +168,13 @@ void CUndeterminedAutomate::print() const
 	while (!st.empty())
 	{
 		Node* cur = st.top().first;
-		std::cout << "I am " << cur->id << " from " << st2.top() << " by \"" 
-			<< st.top().second << "\"" << std::endl;
+		std::cout << "I am " << cur->id << " from " << st2.top() << " by \""
+			<< st.top().second << "\" " << " has " << cur->children.size();
+		if (cur->terminal)
+		{
+			std::cout << " X";
+		}
+		std::cout << std::endl;
 		st.pop();
 		st2.pop();
 		for (Edge i : cur->children)
@@ -181,6 +194,7 @@ void CUndeterminedAutomate::print() const
 
 Node::Node()
 {
-	//extern int g_id;
-	//id = g_id++;
+	id = g_id++;
 }
+
+int Node::g_id = 0;

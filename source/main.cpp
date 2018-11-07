@@ -4,8 +4,6 @@
 #include <unordered_map>
 #include "CUndeterminedAutomate.hpp"
 
-int g_id = 0;
-
 int main()
 {
 	std::string a;
