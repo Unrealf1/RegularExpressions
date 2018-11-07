@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include "CUndeterminedAutomate.hpp"
+#include "ProblemSolver.hpp"
 
 int main()
 {
@@ -10,11 +11,8 @@ int main()
 	std::cin >> a;
 	std::string u;
 	std::cin >> u;
-	
-	CUndeterminedAutomate ak47(a);
-	std::cout << ak47.check(u) << std::endl;
-	for (int i = 0; i < u.size(); ++i)
-	{
 
-	}
+	CUndeterminedAutomate ak47(a);
+	ProblemSolver solver(&ak47);
+	std::cout << solver.GetMaxSuffixSize(u);
 }
