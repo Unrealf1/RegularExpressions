@@ -5,7 +5,8 @@
 class ProblemSolver
 {
 public:
-	ProblemSolver(IRegularAutomate* automaton);
+	ProblemSolver(IRegularAutomate*);
+	~ProblemSolver() = default;
 	int GetMaxSuffixSize(const std::string&) const;
 private:
 	IRegularAutomate* automaton_;

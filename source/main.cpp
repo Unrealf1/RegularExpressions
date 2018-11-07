@@ -1,7 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
-#include <unordered_map>
 #include "CUndeterminedAutomate.hpp"
 #include "ProblemSolver.hpp"
 
@@ -14,5 +12,15 @@ int main()
 
 	CUndeterminedAutomate ak47(a);
 	ProblemSolver solver(&ak47);
-	std::cout << solver.GetMaxSuffixSize(u);
+	int solution = solver.GetMaxSuffixSize(u);
+	if (solution >= 0)
+	{
+		std:: cout << solution << std::endl;
+	}
+	else
+	{
+		std::cout << "INF" << std::endl;
+	}
+
+	ak47.print();
 }

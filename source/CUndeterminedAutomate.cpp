@@ -13,8 +13,7 @@ CUndeterminedAutomate::~CUndeterminedAutomate()
 	}
 }
 
-CUndeterminedAutomate::CUndeterminedAutomate(
-	const std::string& regularExpression)
+CUndeterminedAutomate::CUndeterminedAutomate(const std::string& regularExpression)
 	:root(new Node)
 {
 	if (!is_regular(regularExpression))
