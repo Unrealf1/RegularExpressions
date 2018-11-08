@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
-#include "CUndeterminedAutomate.hpp"
+#include "CUndeterminedAutomaton.hpp"
 #include "ProblemSolver.hpp"
+#include "UniversalException.hpp"
 
 int main()
 {
@@ -10,8 +11,19 @@ int main()
 	std::string u;
 	std::cin >> u;
 
-	CUndeterminedAutomate ak47(a);
-	ProblemSolver solver(&ak47);
+	Automatons::IRegularAutomaton* ak47;
+	try
+	{
+		ak47 = new Automatons::CUndeterminedAutomaton(a);
+	}
+	catch (Automatons::UniversalException& e)
+	{
+		std::cout << e.what();
+		return -1;
+	}
+
+	ProblemSolver solver(ak47);
+
 	int solution = solver.GetMaxSuffixSize(u);
 	if (solution >= 0)
 	{
@@ -21,4 +33,5 @@ int main()
 	{
 		std::cout << "INF" << std::endl;
 	}
+	delete ak47;
 }

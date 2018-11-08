@@ -1,6 +1,6 @@
 #include "ProblemSolver.hpp"
 
-ProblemSolver::ProblemSolver(IRegularAutomate* automaton)
+ProblemSolver::ProblemSolver(Automatons::IRegularAutomaton* automaton)
 	:automaton_(automaton)
 {
 

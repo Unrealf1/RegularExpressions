@@ -1,5 +1,9 @@
 #pragma once
 
 #include <string>
+#include <stack>
 
-bool is_regular(const std::string&); 
+namespace Automatons
+{
+	bool is_regular(const std::string&);
+}

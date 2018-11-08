@@ -1,13 +1,13 @@
 #pragma once
 
-#include "IRegularAutomate.hpp"
+#include "IRegularAutomaton.hpp"
 
 class ProblemSolver
 {
 public:
-	ProblemSolver(IRegularAutomate*);
+	ProblemSolver(Automatons::IRegularAutomaton*);
 	~ProblemSolver() = default;
 	int GetMaxSuffixSize(const std::string&) const;
 private:
-	IRegularAutomate* automaton_;
+	Automatons::IRegularAutomaton* automaton_;
 };
