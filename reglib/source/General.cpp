@@ -11,6 +11,10 @@ bool Automatons::is_regular(const std::string& str)
 	for (size_t i = 0; i < str.size(); ++i)
 	{
 		char c = str[i];
+		if ((c < 'a' || c > 'c') && c != '1' && c != '+' && c != '*' && c != '.')
+		{
+			return false;
+		}
 		if ((c >= 'a' && c <= 'c') || c == '1')
 		{
 			st.push(std::string({ c }));

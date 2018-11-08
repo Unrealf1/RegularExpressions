@@ -22,11 +22,11 @@ int main(int argc, char* argv[])
 	std::string u;
 	std::cin >> u;
 
-	Automatons::IRegularAutomaton* ak47;
+	Automatons::IRegularAutomaton* automaton;
 
 	try
 	{
-		ak47 = new Automatons::CUndeterminedAutomaton(a);
+		automaton = new Automatons::CUndeterminedAutomaton(a);
 	}
 	catch (Automatons::UniversalException& e)
 	{
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	ProblemSolver solver(ak47);
+	ProblemSolver solver(automaton);
 
 	int solution = solver.GetMaxSuffixSize(u);
 	if (solution >= 0)
@@ -45,5 +45,5 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "INF" << std::endl;
 	}
-	delete ak47;
+	delete automaton;
 }

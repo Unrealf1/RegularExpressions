@@ -49,7 +49,7 @@ TEST(GeneralTests, CorrectInput)
 {
 	Automatons::IRegularAutomaton* a;
 
-	for (size_t i = 0; i < 50; ++i)
+	for (size_t i = 0; i < 80; ++i)
 	{
 		bool catched = false;
 
@@ -151,6 +151,32 @@ TEST(GeneralTests, IncorrectInput3)
 	}	
 }
 
+TEST(GeneralTests, IncorrectInput4)
+{
+
+	Automatons::IRegularAutomaton* a;
+	for (size_t i = 0; i < 20; ++i)
+	{
+		bool catched = false;
+
+		std::string str = generateRegularExpression(rand()%(i+20)+2);
+		str[rand()%str.size()] = 'd' + rand()%10;
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(str);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = true;
+		}
+		if (!catched)
+		{
+			delete a;
+		}
+		ASSERT_TRUE(!((!catched) && Automatons::is_regular(str)));
+	}	
+}
+
 struct test
 {
 	std::string reg;
@@ -162,7 +188,9 @@ struct test
 TEST(GeneralTests, HardTests)
 {
 	std::vector<test> hTests = 
-	{ {"ab+ab+.ac+b.a+.", {"abc", "abcb", "ccccbba"}, {-1, 4, 3} } };
+	{ {"ab+ab+.ac+b.a+.", {"abc", "abcb", "ccccbba"}, {-1, 4, 3} },
+	  {"ab+c.aba.*.bac.+.+*", {"babc"}, {2}},
+	  {"acb..bab.c.*.ab.ba.+.+*a.", {"cbaa"}, {1}} };
 
 	for (test curTest : hTests)
 	{
@@ -190,6 +218,44 @@ TEST(GeneralTests, HardTests)
 				int solution = solver.GetMaxSuffixSize(curTest.words[i]);
 				ASSERT_EQ(solution, curTest.answers[i]);
 			}
+			delete a;
+		}
+	}
+}
+
+std::string generateRandomString(size_t sz)
+{
+	std::string str;
+	for (size_t i = 0; i < sz; ++i)
+	{
+		str.push_back('a' + rand()%3);
+	}
+	return str;
+}
+
+TEST (GeneralTests, RandomBlindTests)
+{
+	Automatons::IRegularAutomaton* a;
+	for (size_t i = 0; i < 80; ++i)
+	{
+		bool catched = false;
+		std::string str = generateRegularExpression(rand()%(i+20)+2);
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(str);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = true;
+			ASSERT_TRUE(false);
+			
+		}
+		if (!catched)
+		{
+			ProblemSolver solver(a);
+			int solution = solver.GetMaxSuffixSize(generateRandomString(rand()%(i+15)+1));
+			bool flg = solution > -2;
+			ASSERT_TRUE(flg);
 			delete a;
 		}
 	}
