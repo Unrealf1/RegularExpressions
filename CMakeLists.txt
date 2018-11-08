@@ -6,8 +6,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(Practice1)
 
-file(GLOB_RECURSE SOURCES . source/*.cpp)
+option(WITH_TESTS "Build with tests and run them" ON)
 
-add_executable(Practice1 ${SOURCES})
+add_subdirectory("./reglib")
 
-target_include_directories(Practice1 PUBLIC "./include")
+if(WITH_TESTS)
+	add_subdirectory("./tests")
+endif(WITH_TESTS)
