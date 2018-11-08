@@ -13,5 +13,4 @@ target_include_directories(tests PUBLIC "./include")
 
 target_link_libraries(tests PUBLIC reglib GTest::GTest GTest::Main)
 
-
-add_test(CommonTestsAll tests)
+add_test(TestsAll tests)

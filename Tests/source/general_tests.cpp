@@ -1,6 +1,6 @@
 #include <string>
-#include "../../include/CUndeterminedAutomaton.hpp"
-#include "../../include/UniversalException.hpp"
+#include "CUndeterminedAutomaton.hpp"
+#include "UniversalException.hpp"
 #include "gtest/gtest.h"
 
 std::string generateRegularExpression(size_t sz)

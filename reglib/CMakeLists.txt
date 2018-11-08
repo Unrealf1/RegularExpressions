@@ -7,5 +7,4 @@ file(GLOB_RECURSE SOURCES . source/*.cpp)
 add_library(reglib STATIC ${SOURCES})
 
 target_include_directories(reglib PUBLIC "./include")
-target_include_directories(reglib PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-
+#target_include_directories(reglib PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
