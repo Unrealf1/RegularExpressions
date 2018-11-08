@@ -8,9 +8,9 @@ ProblemSolver::ProblemSolver(IRegularAutomate* automaton)
 
 int ProblemSolver::GetMaxSuffixSize(const std::string& word) const
 {
-	for (int i = 0; i < word.size(); ++i)
+	for (size_t i = 0; i < word.size(); ++i)
 	{
-		if (automaton_->check(word.substr(i, word.size() - 1 - i)))
+		if (automaton_->check(word.substr(i, word.size() - i)))
 		{
 			return word.size() - i;
 		}

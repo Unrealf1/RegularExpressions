@@ -21,6 +21,4 @@ int main()
 	{
 		std::cout << "INF" << std::endl;
 	}
-
-	ak47.print();
 }
