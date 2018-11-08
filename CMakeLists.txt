@@ -12,5 +12,5 @@ add_subdirectory("./reglib")
 add_subdirectory("./Solution")
 
 if(WITH_TESTS)
-	add_subdirectory("./tests")
+	add_subdirectory("./Tests")
 endif(WITH_TESTS)

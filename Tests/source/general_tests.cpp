@@ -2,6 +2,7 @@
 #include "CUndeterminedAutomaton.hpp"
 #include "UniversalException.hpp"
 #include "gtest/gtest.h"
+#include "ProblemSolver.hpp"
 
 std::string generateRegularExpression(size_t sz)
 {
@@ -44,20 +45,152 @@ std::string generateRegularExpression(size_t sz)
 	}
 }
 
-TEST(GeneralTests, IncorrectInput)
+TEST(GeneralTests, CorrectInput)
 {
 	Automatons::IRegularAutomaton* a;
 
-	bool catched;
-
-	std::string str = generateRegularExpression(5);
-
-	try
+	for (size_t i = 0; i < 50; ++i)
 	{
-		a = new Automatons::CUndeterminedAutomaton(str);
+		bool catched = false;
+
+		std::string str = generateRegularExpression(rand()%(i+2)+2);
+		
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(str);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = (e.what() == "ERROR");
+		}
+		if (!catched)
+		{
+			delete a;
+		}
+		ASSERT_TRUE((!catched) && Automatons::is_regular(str));
 	}
-	catch (Automatons::UniversalException& e)
+}
+
+TEST(GeneralTests, IncorrectInput1)
+{
+	Automatons::IRegularAutomaton* a;
+
+	for (size_t i = 0; i < 20; ++i)
 	{
-		catched = (e.what() == "ERROR");
+		bool catched = false;
+
+		std::string str = generateRegularExpression(rand()%(i+20)+2);
+		str.push_back('+');
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(str);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = true;
+		}
+
+		if (!catched)
+		{
+			delete a;
+		}
+
+		ASSERT_TRUE(!((!catched) && Automatons::is_regular(str)));
+	}
+}
+
+TEST(GeneralTests, IncorrectInput2)
+{
+
+	Automatons::IRegularAutomaton* a;
+	for (size_t i = 0; i < 20; ++i)
+	{
+		bool catched = false;
+
+		std::string str = generateRegularExpression(rand()%(i+20)+2);
+		str.push_back('.');
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(str);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = true;
+		}
+		if (!catched)
+		{
+			delete a;
+		}
+		ASSERT_TRUE(!((!catched) && Automatons::is_regular(str)));
+	}	
+}
+
+TEST(GeneralTests, IncorrectInput3)
+{
+
+	Automatons::IRegularAutomaton* a;
+	for (size_t i = 0; i < 20; ++i)
+	{
+		bool catched = false;
+
+		std::string str = generateRegularExpression(rand()%(i+20)+2);
+		str = str.substr(1, str.size() - 1);
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(str);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = true;
+		}
+		if (!catched)
+		{
+			delete a;
+		}
+		ASSERT_TRUE(!((!catched) && Automatons::is_regular(str)));
+	}	
+}
+
+struct test
+{
+	std::string reg;
+	std::vector<std::string> words;
+	// -1 here for INF, -2 for ERROR
+	std::vector<int> answers;
+};
+
+TEST(GeneralTests, HardTests)
+{
+	std::vector<test> hTests = 
+	{ {"ab+ab+.ac+b.a+.", {"abc", "abcb", "ccccbba"}, {-1, 4, 3} } };
+
+	for (test curTest : hTests)
+	{
+		Automatons::IRegularAutomaton* a;
+		bool catched = false;
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(curTest.reg);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = true;
+			for (int ans : curTest.answers)
+			{
+				ASSERT_EQ(ans, -2);
+			}
+			
+		}
+		if (!catched)
+		{
+			for (int i = 0; i < curTest.words.size(); ++i)
+			{
+				ProblemSolver solver(a);
+
+				int solution = solver.GetMaxSuffixSize(curTest.words[i]);
+				ASSERT_EQ(solution, curTest.answers[i]);
+			}
+			delete a;
+		}
 	}
 }
