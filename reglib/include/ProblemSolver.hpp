@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef PROBLEMSOLVER_HPP_
+#define PROBLEMSOLVER_HPP_
+
 #include "IRegularAutomaton.hpp"
 
 class ProblemSolver
@@ -11,3 +14,5 @@ public:
 private:
 	Automatons::IRegularAutomaton* automaton_;
 };
+
+#endif //PROBLEMSOLVER_HPP_

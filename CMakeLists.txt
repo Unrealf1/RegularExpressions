@@ -6,7 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(Practice1 CXX)
 
-option(WITH_TESTS "Build with tests and run them" ON)
+option(WITH_TESTS "Build with tests and run them" OFF)
 
 add_subdirectory("./reglib")
 add_subdirectory("./Solution")

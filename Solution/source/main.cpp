@@ -4,19 +4,8 @@
 #include "ProblemSolver.hpp"
 #include "UniversalException.hpp"
 
-#define TESTS_
-
-#ifdef TESTS_
-
-#endif // TESTS_
-
-
 int main(int argc, char* argv[])
 {
-#ifdef TESTS_
-
-#endif // TESTS_
-
 	std::string a;
 	std::cin >> a;
 	std::string u;
