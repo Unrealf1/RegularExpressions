@@ -185,6 +185,42 @@ struct test
 	std::vector<int> answers;
 };
 
+TEST(GeneralTests, HardCheckTests)
+{
+	std::vector<test> hTests = 
+	{ { "1a+b*+", {"", "a", "bbb", "bbbbbbbbbbbbb", "ab", "c", "aa"}, {1, 1, 1, 1, 0, 0, 0} },
+	  { "ab+ab+.", {"a", "b", "", "ab", "ba", "aa", "c", "aaa", "bb"}, {0, 0, 0, 1, 1, 1, 0, 0, 1} },
+          { "bc.ac..", {"bcac", "bc", "ac", "bca", "bcbc", "acac", "cacb", ""}, {1, 0, 0, 0, 0, 0, 0, 0} },
+	  { "b1.a*.", {"b", "ba", "baaaaaaa", "", "a", "aaaaa"}, {1, 1, 1, 0, 0, 0}	}, 
+          {"a***c*1..", {"", "aaaaaaaaaaaaaaaa", "aaaaaaaaaaccccccccc", "c", "a", "ccca"}, {1, 1, 1, 1, 1, 0}	} };
+	
+	for (test curTest : hTests)
+	{
+		Automatons::IRegularAutomaton* a;
+		bool catched = false;
+		try
+		{
+			a = new Automatons::CUndeterminedAutomaton(curTest.reg);
+		}
+		catch (Automatons::UniversalException& e)
+		{
+			catched = true;
+			ASSERT_TRUE(false);	
+		}
+		if (!catched)
+		{
+			for (int i = 0; i < curTest.words.size(); ++i)
+			{
+				ASSERT_EQ(a->check(curTest.words[i]), curTest.answers[i]);
+			}
+			delete a;
+		}
+	}
+
+
+
+}
+
 TEST(GeneralTests, HardTests)
 {
 	std::vector<test> hTests = 
@@ -260,3 +296,4 @@ TEST (GeneralTests, RandomBlindTests)
 		}
 	}
 }
+
